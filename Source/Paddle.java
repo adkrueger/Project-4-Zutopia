@@ -1,4 +1,3 @@
-import java.awt.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -11,7 +10,7 @@ class Paddle {
 	/**
 	 * The height of the paddle.
 	 */
-	public static final int PADDLE_HEIGHT = 5;
+	public static final int PADDLE_HEIGHT = 25;
 	/**
 	 * The initial position (specified as a fraction of the game height) of center of the paddle.
 	 */
@@ -86,5 +85,12 @@ class Paddle {
 
 		rectangle.setTranslateX(newX - (rectangle.getLayoutX() + PADDLE_WIDTH/2));
 		rectangle.setTranslateY(newY - (rectangle.getLayoutY() + PADDLE_HEIGHT/2));
+	}
+
+	/**
+	 * Updates the position of the paddle based on the mouse position
+	 */
+	public void updatePosition (double mouseX, double mouseY) {
+	    moveTo(mouseX, mouseY);
 	}
 }
