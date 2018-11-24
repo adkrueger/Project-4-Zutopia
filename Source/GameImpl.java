@@ -90,9 +90,9 @@ public class GameImpl extends Pane implements Game {
         // Add start message
         final String message;
         if (state == GameState.LOST) {
-            message = "Game Over\n";
+            message = "Game Over\n" + ball.getBottomHits();
         } else if (state == GameState.WON) {
-            message = "You won!\n";
+            message = "You won!\n" + ball.getNumShapesLeft();
         } else {
             message = "";
         }
@@ -120,6 +120,11 @@ public class GameImpl extends Pane implements Game {
      * Begins the game-play by creating and starting an AnimationTimer.
      */
     public void run() {
+
+        ball.resetBottomHits();
+        ball.resetNumShapesLeft();
+        ball.resetNumShapesLeft();
+
         // Instantiate and start an AnimationTimer to update the component of the game.
         new AnimationTimer() {
             private long lastNanoTime = -1;
@@ -150,6 +155,15 @@ public class GameImpl extends Pane implements Game {
      */
     public GameState runOneTimestep(long deltaNanoTime) {
         ball.updatePosition(deltaNanoTime);
+
+        if (ball.getBottomHits() >= 5) {
+            restartGame(GameState.LOST);
+        }
+
+        if (ball.getNumShapesLeft() <= 0) {
+            restartGame(GameState.WON);
+        }
+
         return GameState.ACTIVE;
     }
 }

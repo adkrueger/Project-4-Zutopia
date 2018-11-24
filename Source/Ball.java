@@ -24,6 +24,10 @@ public class Ball {
 
     // Instance variables
     // (x,y) is the position of the center of the ball.
+    private int bottomHits = 0;
+    private int numShapesLeft = 16;
+    private int helperShapesLeft = 16;
+    private double speedMult = 1.0;
     private double x, y;
     private double vx, vy;
     private Circle circle;
@@ -53,13 +57,33 @@ public class Ball {
         paddle = newPaddle;
     }
 
+    public void resetBottomHits() {
+        bottomHits = 0;
+    }
+
+    public int getBottomHits() {
+        return bottomHits;
+    }
+
+    public void resetNumShapesLeft() {
+        numShapesLeft = 16;
+    }
+
+    public int getNumShapesLeft() {
+        return numShapesLeft;
+    }
+
+    public void resetHelperShapesLeft() {
+        helperShapesLeft = 17;
+    }
+
     /**
      * Constructs a new Ball object at the centroid of the game board
      * with a default velocity that points down and right.
      */
     public Ball() {
-        x = GameImpl.WIDTH / 2;
-        y = GameImpl.HEIGHT / 5 * 4;
+        x = GameImpl.WIDTH / 2.0;
+        y = GameImpl.HEIGHT / 5.0 * 4;
         vx = INITIAL_VX;
         vy = INITIAL_VY;
 
@@ -79,14 +103,21 @@ public class Ball {
 
         wallHit(x, y);
 
-        double dx = vx * deltaNanoTime;
-        double dy = vy * deltaNanoTime;
+        if (getNumShapesLeft() < helperShapesLeft) {
+            speedMult += 0.1;
+            helperShapesLeft--;
+        }
+
+        double dx = vx * deltaNanoTime * speedMult;
+        double dy = vy * deltaNanoTime * speedMult;
 
         x += dx;
         y += dy;
 
         circle.setTranslateX(x - (circle.getLayoutX() + BALL_RADIUS));
         circle.setTranslateY(y - (circle.getLayoutY() + BALL_RADIUS));
+
+
     }
 
     private void wallHit(double x, double y) {
@@ -110,6 +141,7 @@ public class Ball {
         if (y + circle.getRadius() > GameImpl.HEIGHT && vy > 0) {
             // Hit the bottom of the screen
             vy = -vy;
+            bottomHits++;
         } else if (y - circle.getRadius() < 0 && vy < 0) {
             vy = -vy;
         }
@@ -147,6 +179,7 @@ public class Ball {
             if (!isPaddle) {
                 gameImpl.getChildren().remove(shape);
                 remove = shape;
+                numShapesLeft--;
             }
         }
         return remove;
