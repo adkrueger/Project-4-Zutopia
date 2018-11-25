@@ -122,8 +122,11 @@ public class GameImpl extends Pane implements Game {
     public void run() {
 
         ball.resetBottomHits();
+        System.out.println(ball.getBottomHits());
         ball.resetNumShapesLeft();
-        ball.resetNumShapesLeft();
+        System.out.println(ball.getNumShapesLeft());
+        ball.resetHelperShapesLeft();
+        System.out.println();
 
         // Instantiate and start an AnimationTimer to update the component of the game.
         new AnimationTimer() {
@@ -156,11 +159,11 @@ public class GameImpl extends Pane implements Game {
     public GameState runOneTimestep(long deltaNanoTime) {
         ball.updatePosition(deltaNanoTime);
 
-        if (ball.getBottomHits() >= 5) {
+        if (ball.getBottomHits() == 5) {
             restartGame(GameState.LOST);
         }
 
-        if (ball.getNumShapesLeft() <= 0) {
+        if (ball.getNumShapesLeft() == 0) {
             restartGame(GameState.WON);
         }
 

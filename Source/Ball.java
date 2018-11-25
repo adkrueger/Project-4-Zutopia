@@ -21,6 +21,10 @@ public class Ball {
      * The initial velocity of the ball in the y direction.
      */
     public static final double INITIAL_VY = 1e-7;
+    /**
+     * The acceleration multiplier of the ball
+     */
+    public static final double SPEEDACC = 0.1;
 
     // Instance variables
     // (x,y) is the position of the center of the ball.
@@ -42,37 +46,66 @@ public class Ball {
         return circle;
     }
 
-    // TODO: JAVADOC
+    /**
+     * Sets the list of target shapes to the list given as a parameter
+     * @param newShapes the new target shapes
+     */
     public void setShapes(ArrayList<Rectangle> newShapes) {
         shapes = newShapes;
     }
 
-    // TODO: JAVADOC
+    /**
+     * Creates a new GameImpl to be used for creating the game
+     * @param newGameImpl the new instance of a game implementation
+     */
     public void setGameApp(GameImpl newGameImpl) {
         gameImpl = newGameImpl;
     }
 
-    // TODO: JAVADOC
+    /**
+     * Creates a new Paddle for the player to control
+     * @param newPaddle the new Paddle
+     */
     public void setPaddle(Paddle newPaddle) {
         paddle = newPaddle;
     }
 
+    /**
+     * resets the bottomHits value to its original value
+     * (necessary when playing multiple games in a row)
+     */
     public void resetBottomHits() {
         bottomHits = 0;
     }
 
+    /**
+     * Returns the current value of bottomHits
+     * @return the current value of bottomHits
+     */
     public int getBottomHits() {
         return bottomHits;
     }
 
+    /**
+     * Resets the numShapesLeft variable to its original value of 16
+     * (necessary when starting a new game)
+     */
     public void resetNumShapesLeft() {
         numShapesLeft = 16;
     }
 
+    /**
+     * Returns the current value of numShapesLeft
+     * @return the current value of numShapesLeft
+     */
     public int getNumShapesLeft() {
         return numShapesLeft;
     }
 
+    /**
+     * Resets the helperShapesLeft variable to its original value of 17
+     * (necessary when starting a new game)
+     */
     public void resetHelperShapesLeft() {
         helperShapesLeft = 17;
     }
@@ -103,8 +136,8 @@ public class Ball {
 
         wallHit(x, y);
 
-        if (getNumShapesLeft() < helperShapesLeft) {
-            speedMult += 0.1;
+        if (getNumShapesLeft() < helperShapesLeft) {     // accelerates the ball when it removes a shape
+            speedMult += SPEEDACC;
             helperShapesLeft--;
         }
 
@@ -120,6 +153,15 @@ public class Ball {
 
     }
 
+    /**
+     * Tests whether the ball collided with a wall, reversing its x-direction if
+     * it hits a vertical wall, or reversing its y-direction if it hits a horizontal
+     * wall
+     * Also adjusts the number of times the ball can hit the bottom
+     * wall before the game is considered over
+     * @param x
+     * @param y
+     */
     private void wallHit(double x, double y) {
         if (shapes != null) {
             ArrayList<Rectangle> removeList = new ArrayList<>();
@@ -141,13 +183,22 @@ public class Ball {
         if (y + circle.getRadius() > GameImpl.HEIGHT && vy > 0) {
             // Hit the bottom of the screen
             vy = -vy;
-            bottomHits++;
+            bottomHits++;    // adds 1 to bottomHits, which ends the game when it equals 5
         } else if (y - circle.getRadius() < 0 && vy < 0) {
             vy = -vy;
         }
 
     }
 
+    /**
+     * Checks whether the ball is colliding with a Rectangle,
+     * which is removed assuming the Rectangle that the ball collided
+     * with is an animal. Otherwise, the ball bounces off of the Rectangle
+     * (which would have to be the Paddle)
+     * @param shape the Rectangle that the ball is colliding with
+     * @param isPaddle whether or not the Rectangle is the Paddle
+     * @return the list of Rectangles to be removed from the game
+     */
     private Rectangle checkColliding(Rectangle shape, boolean isPaddle) {
         Rectangle remove = null;
         Bounds circleBounds = circle.getBoundsInParent();
@@ -179,7 +230,7 @@ public class Ball {
             if (!isPaddle) {
                 gameImpl.getChildren().remove(shape);
                 remove = shape;
-                numShapesLeft--;
+                numShapesLeft--;    // removes 1 from numShapesLeft, which ends the game when it is 0
             }
         }
         return remove;
