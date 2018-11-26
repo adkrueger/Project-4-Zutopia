@@ -1,15 +1,9 @@
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
 import javafx.animation.AnimationTimer;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -121,9 +115,7 @@ public class GameImpl extends Pane implements Game {
         });
 
         // Add another event handler to steer paddle...
-        setOnMouseMoved(e -> {
-            paddle.updatePosition(e.getX(), e.getY());
-        });
+        setOnMouseMoved(e -> paddle.updatePosition(e.getX(), e.getY()));
     }
 
     /**

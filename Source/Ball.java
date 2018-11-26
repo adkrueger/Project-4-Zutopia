@@ -196,12 +196,14 @@ class Ball {
             double top = Math.abs(y - shapeBounds.getMaxY());
             double bottom = Math.abs(y - shapeBounds.getMinY());
             vy = -vy;
-            if (top < bottom) {
-                y = shapeBounds.getMaxY() + BALL_RADIUS;
-            } else {
-                y = shapeBounds.getMinY() - BALL_RADIUS;
+            if (isPaddle) {
+                if (top < bottom) {
+                    y = shapeBounds.getMaxY() + BALL_RADIUS;
+                } else {
+                    y = shapeBounds.getMinY() - BALL_RADIUS;
+                }
             }
-            if (!isPaddle) {
+            else {
                 gameImpl.getChildren().remove(shape);
                 remove = shape;
                 numShapesLeft--;    // removes 1 from numShapesLeft, which ends the game when it is 0 (starts at 16)
