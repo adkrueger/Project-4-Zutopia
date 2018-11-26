@@ -2,6 +2,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 
 /**
@@ -48,6 +49,7 @@ class Ball {
 
     /**
      * Sets the list of target shapes to the list given as a parameter
+     *
      * @param newShapes the new target shapes
      */
     void setShapes(ArrayList<Rectangle> newShapes) {
@@ -56,6 +58,7 @@ class Ball {
 
     /**
      * Creates a new GameImpl to be used for creating the game
+     *
      * @param newGameImpl the new instance of a game implementation
      */
     void setGameApp(GameImpl newGameImpl) {
@@ -64,6 +67,7 @@ class Ball {
 
     /**
      * Creates a new Paddle for the player to control
+     *
      * @param newPaddle the new Paddle
      */
     void setPaddle(Paddle newPaddle) {
@@ -72,6 +76,7 @@ class Ball {
 
     /**
      * Returns the current value of bottomHits
+     *
      * @return the current value of bottomHits
      */
     int getBottomHits() {
@@ -80,6 +85,7 @@ class Ball {
 
     /**
      * Returns the current value of numShapesLeft
+     *
      * @return the current value of numShapesLeft
      */
     int getNumShapesLeft() {
@@ -135,6 +141,7 @@ class Ball {
      * wall
      * Also adjusts the number of times the ball can hit the bottom
      * wall before the game is considered over
+     *
      * @param x
      * @param y
      */
@@ -163,7 +170,7 @@ class Ball {
             if (bottomHits == 5) {
                 shapes.clear();     // when the player loses the game, removes all shapes so they don't count for the next game
             }
-                System.out.println(bottomHits);
+            System.out.println(bottomHits);
         } else if (y - circle.getRadius() < 0 && vy < 0) {
             vy = -vy;
         }
@@ -175,7 +182,8 @@ class Ball {
      * which is removed assuming the Rectangle that the ball collided
      * with is an animal. Otherwise, the ball bounces off of the Rectangle
      * (which would have to be the Paddle)
-     * @param shape the Rectangle that the ball is colliding with
+     *
+     * @param shape    the Rectangle that the ball is colliding with
      * @param isPaddle whether or not the Rectangle is the Paddle
      * @return the list of Rectangles to be removed from the game
      */
@@ -185,27 +193,13 @@ class Ball {
         Bounds shapeBounds = shape.getBoundsInParent();
 
         if (circleBounds.intersects(shapeBounds)) {
-            double left = Math.abs(x - shapeBounds.getMinX());
-            double right = Math.abs(x - shapeBounds.getMaxX());
             double top = Math.abs(y - shapeBounds.getMaxY());
             double bottom = Math.abs(y - shapeBounds.getMinY());
-
-            if (Math.abs(y - shape.getY()) > Math.abs(x - shape.getX()) || isPaddle) {
-                //System.out.println("Top/Bottom hit");
-                vy = -vy;
-                if (top < bottom) {
-                    y = shapeBounds.getMaxY() + BALL_RADIUS;
-                } else {
-                    y = shapeBounds.getMinY() - BALL_RADIUS;
-                }
+            vy = -vy;
+            if (top < bottom) {
+                y = shapeBounds.getMaxY() + BALL_RADIUS;
             } else {
-                //System.out.println("Left/Right hit");
-                vx = -vx;
-                if (left < right) {
-                    x = shapeBounds.getMinX() - BALL_RADIUS;
-                } else {
-                    x = shapeBounds.getMaxX() + BALL_RADIUS;
-                }
+                y = shapeBounds.getMinY() - BALL_RADIUS;
             }
             if (!isPaddle) {
                 gameImpl.getChildren().remove(shape);

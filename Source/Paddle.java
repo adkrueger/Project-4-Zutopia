@@ -10,7 +10,7 @@ class Paddle {
 	/**
 	 * The height of the paddle.
 	 */
-	public static final int PADDLE_HEIGHT = 25;
+	public static final int PADDLE_HEIGHT = 5;
 	/**
 	 * The initial position (specified as a fraction of the game height) of center of the paddle.
 	 */

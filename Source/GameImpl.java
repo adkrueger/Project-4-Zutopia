@@ -83,7 +83,7 @@ public class GameImpl extends Pane implements Game {
                 if (random == 2) {
                     img = new Image("file:goat.jpg");
                 }
-                Rectangle animal = new Rectangle(i * picScale + picScale / 2.0, l * picScale + picScale / 2.0, picScale * 0.5, picScale * 0.5);
+                Rectangle animal = new Rectangle(i * picScale + picScale / 2.0, l * picScale + picScale / 2.0, picScale / 2, picScale / 2);
                 animal.setFill(new ImagePattern(img));
                 getChildren().add(animal);
                 collidingShapes.add(animal);
