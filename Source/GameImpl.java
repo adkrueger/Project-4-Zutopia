@@ -67,9 +67,10 @@ public class GameImpl extends Pane implements Game {
 
         int picScale = WIDTH / 5;
 
+        // Add the animals to the board, with some randomness
         for (int i = 0; i < 4; i++) {
             for (int l = 0; l < 4; l++) {
-                int random = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+                int random = ThreadLocalRandom.current().nextInt(3);
                 Image img = new Image("file:horse.jpg");
                 if (random == 1) {
                     img = new Image("file:duck.jpg");
@@ -77,7 +78,7 @@ public class GameImpl extends Pane implements Game {
                 if (random == 2) {
                     img = new Image("file:goat.jpg");
                 }
-                Rectangle animal = new Rectangle(i * picScale + picScale / 2.0, l * picScale + picScale / 2.0, picScale / 2, picScale / 2);
+                Rectangle animal = new Rectangle(i * picScale + picScale / 1.5f, l * picScale + picScale / 1.5f, picScale / 2.0f, picScale / 2.0f);
                 animal.setFill(new ImagePattern(img));
                 getChildren().add(animal);
                 collidingShapes.add(animal);
@@ -101,8 +102,8 @@ public class GameImpl extends Pane implements Game {
             message = "";
         }
         final Label startLabel = new Label(message + "Click mouse to start");
-        startLabel.setLayoutX(WIDTH / 2.0 - 50);
-        startLabel.setLayoutY(HEIGHT / 2.0 + 100);
+        startLabel.setLayoutX(WIDTH / 2.0f);
+        startLabel.setLayoutY(HEIGHT - (HEIGHT / 3.0f));
         getChildren().add(startLabel);
 
         // Add event handler to start the game
@@ -153,7 +154,6 @@ public class GameImpl extends Pane implements Game {
      */
     private GameState runOneTimestep(long deltaNanoTime) {
         ball.updatePosition(deltaNanoTime);
-
         if (ball.getBottomHits() == 5) {
             System.out.println("Loser");
             return GameState.LOST;
@@ -163,7 +163,6 @@ public class GameImpl extends Pane implements Game {
             System.out.println("Winner");
             return GameState.WON;
         }
-
         return GameState.ACTIVE;
     }
 }

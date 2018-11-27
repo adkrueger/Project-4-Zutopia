@@ -116,12 +116,12 @@ class Ball {
      */
     void updatePosition(long deltaNanoTime) {
 
-        wallHit(x, y);
-
         if (getNumShapesLeft() < helperShapesLeft) {     // accelerates the ball when it removes a shape
             speedMult += SPEEDACC;
             helperShapesLeft--;
         }
+
+        wallHit(x, y);
 
         double dx = vx * deltaNanoTime * speedMult;
         double dy = vy * deltaNanoTime * speedMult;
@@ -131,19 +131,16 @@ class Ball {
 
         circle.setTranslateX(x - (circle.getLayoutX() + BALL_RADIUS));
         circle.setTranslateY(y - (circle.getLayoutY() + BALL_RADIUS));
-
-
     }
 
     /**
      * Tests whether the ball collided with a wall, reversing its x-direction if
-     * it hits a vertical wall, or reversing its y-direction if it hits a horizontal
-     * wall
+     * it hits a vertical wall, or reversing its y-direction if it hits a horizontal wall
      * Also adjusts the number of times the ball can hit the bottom
      * wall before the game is considered over
      *
-     * @param x
-     * @param y
+     * @param x the x coordinate of the ball
+     * @param y the y coordinate of the ball
      */
     private void wallHit(double x, double y) {
         if (shapes != null) {
@@ -154,16 +151,13 @@ class Ball {
             shapes.removeAll(removeList);
         }
 
-        if (paddle != null) {
-            checkColliding(paddle.getRectangle(), true);
-        }
+        checkColliding(paddle.getRectangle(), true);
 
         if (x + circle.getRadius() > GameImpl.WIDTH && vx > 0) {
             vx = -vx;
         } else if (x - circle.getRadius() < 0 && vx < 0) {
             vx = -vx;
-        }
-        if (y + circle.getRadius() > GameImpl.HEIGHT && vy > 0) {
+        } else if (y + circle.getRadius() > GameImpl.HEIGHT && vy > 0) {
             // Hit the bottom of the screen
             vy = -vy;
             bottomHits++;    // adds 1 to bottomHits, which ends the game when it equals 5 (starts at 0)
@@ -174,7 +168,6 @@ class Ball {
         } else if (y - circle.getRadius() < 0 && vy < 0) {
             vy = -vy;
         }
-
     }
 
     /**
@@ -196,11 +189,11 @@ class Ball {
             double top = Math.abs(y - shapeBounds.getMaxY());
             double bottom = Math.abs(y - shapeBounds.getMinY());
             vy = -vy;
-            if (isPaddle) {
+            if (isPaddle) { // Move the ball with the paddle a small amount to stop clipping
                 if (top < bottom) {
-                    y = shapeBounds.getMaxY() + BALL_RADIUS;
+                    y = shapeBounds.getMaxY() + BALL_RADIUS + vy;
                 } else {
-                    y = shapeBounds.getMinY() - BALL_RADIUS;
+                    y = shapeBounds.getMinY() - BALL_RADIUS - vy;
                 }
             }
             else {
@@ -210,6 +203,6 @@ class Ball {
                 System.out.println(numShapesLeft);
             }
         }
-        return remove;
+        return remove; // Return the shape to remove from the board
     }
 }
