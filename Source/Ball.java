@@ -164,7 +164,6 @@ class Ball {
             if (bottomHits == 5) {
                 shapes.clear();     // when the player loses the game, removes all shapes so they don't count for the next game
             }
-            System.out.println(bottomHits);
         } else if (y - circle.getRadius() < 0 && vy < 0) {
             vy = -vy;
         }
@@ -200,7 +199,6 @@ class Ball {
                 gameImpl.getChildren().remove(shape);
                 remove = shape;
                 numShapesLeft--;    // removes 1 from numShapesLeft, which ends the game when it is 0 (starts at 16)
-                System.out.println(numShapesLeft);
             }
         }
         return remove; // Return the shape to remove from the board
